@@ -19,8 +19,12 @@ func TestRealExecutor_Integration_ListInterfaces(t *testing.T) {
 		t.Skipf("tshark not available: %v", err)
 	}
 
-	stdout, _, err := exec.Execute(context.Background(), "tshark", []string{"-D"})
+	stdout, stderr, err := exec.Execute(context.Background(), "tshark", []string{"-D"})
 	if err != nil {
+		// Npcap may not be installed — tshark -D fails without it but tshark still works.
+		if strings.Contains(string(stderr), "Npcap") || strings.Contains(err.Error(), "Npcap") {
+			t.Skipf("tshark works but Npcap not installed (needed for interface listing): %v", err)
+		}
 		t.Fatalf("tshark -D failed: %v", err)
 	}
 

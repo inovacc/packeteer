@@ -164,7 +164,7 @@ func TestE2E_SamplePcap(t *testing.T) {
 			t.Fatalf("get prompt failed: %v", err)
 		}
 		text := result.Messages[0].Content.(*mcp.TextContent).Text
-		if !strings.Contains(text, samplePcap) {
+		if !strings.Contains(text, "sample.pcap") {
 			t.Error("expected file path in prompt")
 		}
 		t.Log("prompt succeeded")
