@@ -1,13 +1,13 @@
 # Roadmap
 
 ## Current Status
-**Overall Progress:** 100% - v1.0.0 released
+**Overall Progress:** 100% - v1.1.0 released
 
 ## Phases
 
 ### Phase 1: Foundation [COMPLETE]
 - [x] Project scaffold (structure, tooling, CI config)
-- [x] Branding and identity (Packeteer)
+- [x] Branding and identity (Sharkline)
 - [x] CommandExecutor interface and RealExecutor implementation
 - [x] MockExecutor for testing
 - [x] Safety/validation module (path, filter, timeout, count)
@@ -37,21 +37,24 @@
 - [x] GoReleaser pipeline validation (6 platforms)
 - [x] v1.0.0 released — 2026-03-24
 
-### Phase 5: Hardening & v1.1.0 [NOT STARTED]
-- [ ] Increase test coverage to 80%+ (resource/prompt tests)
-- [ ] Sample pcap + end-to-end quickstart demo
-- [ ] Structured JSON output parsing for typed packet data
-- [ ] Concurrent capture management with semaphore limiting
+### Phase 5: Hardening & v1.1.0 [COMPLETE]
+- [x] Structured JSON output parsing (`summarize=true` on read_pcap/capture_packets)
+- [x] Concurrent capture management with CaptureLimiter (semaphore, max 3)
+- [x] Sample pcap + end-to-end integration tests
+- [x] Setup command with cross-platform auto-install
+- [x] Rename: Packeteer → Sharkline
+- [x] v1.1.0 released — 2026-03-24
 
 ## Test Coverage
 
-**Current:** 37.7%  |  **Target:** 80%
+**Current:** 40.4%  |  **Target:** 80%
 
 | Package | Coverage | Status |
 |---------|----------|--------|
 | internal/safety | 100.0% | Complete |
-| internal/output | 100.0% | Complete |
-| internal/server | 85.0% | Good |
+| internal/server | 91.3% | Excellent |
+| internal/output | 84.1% | Good |
 | internal/executor | 68.1% | Good |
-| internal/tools | 58.0% | Needs improvement (resources/prompts untested) |
+| internal/tools | 58.3% | Needs improvement |
+| internal/setup | 26.5% | Needs improvement |
 | cmd | 0.0% | Scaffold code |

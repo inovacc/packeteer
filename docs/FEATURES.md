@@ -4,12 +4,12 @@
 
 ### Live Packet Capture
 - **Status:** Completed
-- **Description:** Capture live network packets with BPF and display filters, timeout and count limits
+- **Description:** Capture live network packets with BPF and display filters, timeout and count limits, concurrent capture limiting
 - **Tool:** `capture_packets`
 
 ### Pcap File Analysis
 - **Status:** Completed
-- **Description:** Read and analyze pcap/pcapng files with Wireshark display filters, JSON output
+- **Description:** Read and analyze pcap/pcapng files with Wireshark display filters, JSON output, optional structured summaries
 - **Tool:** `read_pcap`
 
 ### Protocol Field Extraction
@@ -52,22 +52,40 @@
 - **Description:** List available network interfaces for packet capture
 - **Tool:** `list_interfaces`
 
-## Proposed Features
-
 ### MCP Resources for Capture Files
-- **Priority:** P2
-- **Status:** Proposed
-- **Description:** Expose pcap files as browsable MCP resources with URI templates
-- **Motivation:** Allow AI to discover and browse available captures without needing file paths
+- **Status:** Completed (v1.0.0)
+- **Description:** Browse pcap files as MCP resources via `sharkline://captures` and `sharkline://captures/{filename}`
 
 ### Analysis Workflow Prompts
-- **Priority:** P2
-- **Status:** Proposed
-- **Description:** Guided MCP prompts for common workflows (traffic analysis, connection investigation)
-- **Motivation:** Reduce the learning curve for AI assistants interacting with packet data
+- **Status:** Completed (v1.0.0)
+- **Description:** 3 guided MCP prompts: analyze-traffic, investigate-connection, security-scan
 
 ### HTTP Transport
-- **Priority:** P3
+- **Status:** Completed (v1.0.0)
+- **Description:** Streamable HTTP transport for remote MCP connections (`--transport http --port 8080`)
+
+### Structured JSON Packet Parsing
+- **Status:** Completed (v1.1.0)
+- **Description:** Parse tshark JSON into typed packet summaries (source, dest, protocol, info) via `summarize=true`
+
+### Concurrent Capture Limiting
+- **Status:** Completed (v1.1.0)
+- **Description:** Semaphore-based CaptureLimiter (default max 3) prevents resource exhaustion
+
+### Auto-Install Setup Command
+- **Status:** Completed (v1.1.0)
+- **Description:** `sharkline setup --install` auto-installs Wireshark via winget/choco/brew/apt/dnf/pacman
+
+## Proposed Features
+
+### Npcap Auto-Install
+- **Priority:** P2
 - **Status:** Proposed
-- **Description:** Support Streamable HTTP transport for remote MCP connections
-- **Motivation:** Enable use from remote AI systems without local process execution
+- **Description:** Detect missing Npcap on Windows and offer to install for live capture support
+- **Motivation:** Live capture fails without Npcap; setup command should handle this
+
+### Structured Output for All Tools
+- **Priority:** P2
+- **Status:** Proposed
+- **Description:** Extend structured JSON parsing to statistics, decode_packet, and extract_fields
+- **Motivation:** Consistent typed output across all tools improves AI consumption

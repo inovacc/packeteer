@@ -14,10 +14,20 @@
   - [x] CI with tshark integration tests
 
 ## v1.1.0 - Hardening
+- **Released:** 2026-03-24
+- **Status:** Complete
+- **Test Coverage:** 40.4%
+- **Goals:**
+  - [x] Structured JSON output parsing (summarize=true on read_pcap/capture_packets)
+  - [x] Concurrent capture management (CaptureLimiter, max 3)
+  - [x] Sample pcap with end-to-end integration tests
+  - [x] Setup command with cross-platform auto-install (winget/choco/brew/apt/dnf/pacman)
+  - [x] Project rename: Packeteer → Sharkline
+
+## v1.2.0 - Coverage & Polish
 - **Target:** TBD
 - **Status:** Not Started
 - **Goals:**
-  - [ ] Test coverage 80%+ (resource/prompt tests)
-  - [ ] Sample pcap with end-to-end quickstart
-  - [ ] Structured JSON output parsing
-  - [ ] Concurrent capture management
+  - [ ] Test coverage 80%+ (tools resources/prompts, setup package)
+  - [ ] Npcap auto-install on Windows for live capture
+  - [ ] Structured output for all tools (not just read_pcap/capture_packets)

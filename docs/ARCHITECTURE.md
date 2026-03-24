@@ -7,12 +7,18 @@ flowchart TB
     subgraph CLI["CLI Layer (cmd/)"]
         ROOT[sharkline root]
         SERVE[serve command]
+        SETUP[setup command]
         VERSION[version command]
         AICTX[aicontext command]
     end
 
     subgraph MCP["MCP Server (internal/server/)"]
-        SERVER[MCP Server<br/>stdio transport]
+        SERVER[MCP Server<br/>stdio + HTTP]
+    end
+
+    subgraph SETUPKG["Setup (internal/setup/)"]
+        DETECT[Check/Detect]
+        INSTALL[Auto-Install]
     end
 
     subgraph TOOLS["Tool Handlers (internal/tools/)"]
@@ -32,6 +38,7 @@ flowchart TB
         VAL[Path Validation]
         SAN[Filter Sanitization]
         CLAMP[Timeout/Count Clamping]
+        LIMITER[CaptureLimiter]
     end
 
     subgraph EXEC["Executor (internal/executor/)"]
@@ -43,6 +50,7 @@ flowchart TB
     subgraph OUTPUT["Output (internal/output/)"]
         TRUNC[Truncation]
         FMT[Formatting]
+        PARSER[JSON Packet Parser]
     end
 
     subgraph EXT["External Tools"]
@@ -53,9 +61,12 @@ flowchart TB
     end
 
     ROOT --> SERVE
+    ROOT --> SETUP
     ROOT --> VERSION
     ROOT --> AICTX
     SERVE --> SERVER
+    SETUP --> DETECT
+    DETECT --> INSTALL
 
     SERVER --> T1 & T2 & T3 & T4 & T5
     SERVER --> T6 & T7 & T8 & T9 & T10
@@ -133,5 +144,8 @@ sequenceDiagram
 
 - **Hexagonal Architecture:** `CommandExecutor` interface decouples tool handlers from real CLI execution, enabling full unit testing with `MockExecutor`
 - **Safety First:** All inputs validated before any command execution — path traversal blocked, filters sanitized, timeouts clamped
-- **Stdio Transport:** MCP JSON-RPC over stdin/stdout; all logging to stderr to avoid protocol corruption
+- **Dual Transport:** Stdio (default) and Streamable HTTP; all logging to stderr to avoid protocol corruption
 - **Output Truncation:** Large captures truncated to 512KB with metadata about omitted data
+- **Structured Parsing:** `ParseTSharkJSON` extracts typed packet summaries (source, dest, protocol, info) from tshark JSON
+- **Capture Limiting:** `CaptureLimiter` semaphore prevents resource exhaustion (default max 3 concurrent)
+- **Auto-Setup:** Cross-platform Wireshark detection and installation via winget/choco/brew/apt/dnf/pacman
