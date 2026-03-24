@@ -5,7 +5,7 @@
 ```mermaid
 flowchart TB
     subgraph CLI["CLI Layer (cmd/)"]
-        ROOT[packeteer root]
+        ROOT[sharkline root]
         SERVE[serve command]
         VERSION[version command]
         AICTX[aicontext command]

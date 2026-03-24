@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/inovacc/packeteer/internal/executor"
+	"github.com/inovacc/sharkline/internal/executor"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 )
 
@@ -126,7 +126,7 @@ func TestE2E_SamplePcap(t *testing.T) {
 
 	t.Run("resource_list_captures", func(t *testing.T) {
 		result, err := cs.ReadResource(ctx, &mcp.ReadResourceParams{
-			URI: "packeteer://captures",
+			URI: "sharkline://captures",
 		})
 		if err != nil {
 			t.Fatalf("read resource failed: %v", err)
@@ -140,7 +140,7 @@ func TestE2E_SamplePcap(t *testing.T) {
 
 	t.Run("resource_read_capture", func(t *testing.T) {
 		result, err := cs.ReadResource(ctx, &mcp.ReadResourceParams{
-			URI: "packeteer://captures/sample.pcap",
+			URI: "sharkline://captures/sample.pcap",
 		})
 		if err != nil {
 			t.Fatalf("read resource failed: %v", err)

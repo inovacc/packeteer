@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/inovacc/packeteer/internal/executor"
-	"github.com/inovacc/packeteer/internal/output"
-	"github.com/inovacc/packeteer/internal/safety"
+	"github.com/inovacc/sharkline/internal/executor"
+	"github.com/inovacc/sharkline/internal/output"
+	"github.com/inovacc/sharkline/internal/safety"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 )
 

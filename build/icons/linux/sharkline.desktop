@@ -1,8 +1,8 @@
 [Desktop Entry]
 Type=Application
-Name=packeteer
-Comment=packeteer
-Exec=packeteer
-Icon=packeteer
+Name=sharkline
+Comment=sharkline
+Exec=sharkline
+Icon=sharkline
 Categories=Utility;
 Terminal=false

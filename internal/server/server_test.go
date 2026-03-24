@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/inovacc/packeteer/internal/executor"
+	"github.com/inovacc/sharkline/internal/executor"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 )
 
@@ -296,12 +296,12 @@ func TestResources_ListAndRead(t *testing.T) {
 		}
 		found := false
 		for _, r := range result.Resources {
-			if r.URI == "packeteer://captures" {
+			if r.URI == "sharkline://captures" {
 				found = true
 			}
 		}
 		if !found {
-			t.Error("expected packeteer://captures resource")
+			t.Error("expected sharkline://captures resource")
 		}
 	})
 
@@ -323,7 +323,7 @@ func TestResources_ListAndRead(t *testing.T) {
 
 	t.Run("read captures list", func(t *testing.T) {
 		result, err := cs.ReadResource(ctx, &mcp.ReadResourceParams{
-			URI: "packeteer://captures",
+			URI: "sharkline://captures",
 		})
 		if err != nil {
 			t.Fatalf("read resource failed: %v", err)
@@ -339,7 +339,7 @@ func TestResources_ListAndRead(t *testing.T) {
 
 	t.Run("read specific capture", func(t *testing.T) {
 		result, err := cs.ReadResource(ctx, &mcp.ReadResourceParams{
-			URI: "packeteer://captures/sample.pcap",
+			URI: "sharkline://captures/sample.pcap",
 		})
 		if err != nil {
 			t.Fatalf("read resource failed: %v", err)
@@ -355,7 +355,7 @@ func TestResources_ListAndRead(t *testing.T) {
 
 	t.Run("read invalid extension", func(t *testing.T) {
 		_, err := cs.ReadResource(ctx, &mcp.ReadResourceParams{
-			URI: "packeteer://captures/malware.exe",
+			URI: "sharkline://captures/malware.exe",
 		})
 		if err == nil {
 			t.Fatal("expected error for invalid extension")
@@ -364,7 +364,7 @@ func TestResources_ListAndRead(t *testing.T) {
 
 	t.Run("read nonexistent file", func(t *testing.T) {
 		_, err := cs.ReadResource(ctx, &mcp.ReadResourceParams{
-			URI: "packeteer://captures/nonexistent.pcap",
+			URI: "sharkline://captures/nonexistent.pcap",
 		})
 		if err == nil {
 			t.Fatal("expected error for nonexistent file")
@@ -377,7 +377,7 @@ func TestResources_NoCaptureDir(t *testing.T) {
 	ctx := context.Background()
 
 	result, err := cs.ReadResource(ctx, &mcp.ReadResourceParams{
-		URI: "packeteer://captures",
+		URI: "sharkline://captures",
 	})
 	if err != nil {
 		t.Fatalf("read resource failed: %v", err)

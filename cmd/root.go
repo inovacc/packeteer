@@ -6,13 +6,13 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "packeteer",
+	Use:   "sharkline",
 	Short: "MCP server for Wireshark CLI tools — packet capture and network analysis for AI",
-	Long: `Packeteer is an MCP (Model Context Protocol) server that wraps Wireshark's CLI tools
+	Long: `Sharkline is an MCP (Model Context Protocol) server that wraps Wireshark's CLI tools
 (tshark, capinfos, editcap, mergecap) giving AI assistants the ability to capture,
 analyze, and dissect network traffic.
 
-Run 'packeteer serve' to start the MCP server on stdio transport.`,
+Run 'sharkline serve' to start the MCP server on stdio transport.`,
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.

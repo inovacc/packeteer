@@ -1,8 +1,8 @@
-# CLAUDE.md — Packeteer
+# CLAUDE.md — Sharkline
 
 ## Overview
 
-Packeteer is a Go MCP server wrapping Wireshark CLI tools (tshark, capinfos, editcap, mergecap) for AI-driven packet capture and network analysis.
+Sharkline is a Go MCP server wrapping Wireshark CLI tools (tshark, capinfos, editcap, mergecap) for AI-driven packet capture and network analysis.
 
 ## Build & Test
 

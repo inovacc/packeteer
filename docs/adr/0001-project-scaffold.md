@@ -13,7 +13,7 @@ Setting up Packeteer — a Go MCP server wrapping Wireshark CLI tools for AI-dri
 - **Task Runner:** Taskfile (over Makefile) for cross-platform support
 - **Linting:** golangci-lint v2 with curated ruleset
 - **Releases:** GoReleaser for automated cross-platform builds
-- **Module Path:** github.com/inovacc/packeteer
+- **Module Path:** github.com/inovacc/sharkline
 
 ## Consequences
 

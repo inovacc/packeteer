@@ -3,15 +3,15 @@ package server
 import (
 	"log/slog"
 
-	"github.com/inovacc/packeteer/internal/executor"
-	"github.com/inovacc/packeteer/internal/safety"
-	"github.com/inovacc/packeteer/internal/tools"
+	"github.com/inovacc/sharkline/internal/executor"
+	"github.com/inovacc/sharkline/internal/safety"
+	"github.com/inovacc/sharkline/internal/tools"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 )
 
 const version = "1.1.0-dev"
 
-// New creates and configures the Packeteer MCP server with all tools, resources, and prompts registered.
+// New creates and configures the Sharkline MCP server with all tools, resources, and prompts registered.
 func New(exec executor.CommandExecutor, logger *slog.Logger, opts ...Option) *mcp.Server {
 	cfg := &config{}
 	for _, opt := range opts {
@@ -19,11 +19,11 @@ func New(exec executor.CommandExecutor, logger *slog.Logger, opts ...Option) *mc
 	}
 	server := mcp.NewServer(
 		&mcp.Implementation{
-			Name:    "packeteer",
+			Name:    "sharkline",
 			Version: version,
 		},
 		&mcp.ServerOptions{
-			Instructions: `Packeteer provides Wireshark CLI tools for packet capture and network analysis.
+			Instructions: `Sharkline provides Wireshark CLI tools for packet capture and network analysis.
 
 Available tools cover the full Wireshark suite:
 - tshark: capture, read, filter, extract fields, decode packets, list interfaces/protocols, statistics
@@ -96,7 +96,7 @@ Use summarize=true on read_pcap/capture_packets for structured packet summaries 
 	// Prompts
 	tools.RegisterPrompts(server)
 
-	logger.Info("packeteer MCP server initialized",
+	logger.Info("sharkline MCP server initialized",
 		"version", version,
 		"tools", 10,
 		"prompts", 3,

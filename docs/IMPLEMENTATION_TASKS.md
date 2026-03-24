@@ -40,7 +40,7 @@
 ## Domain 2: MCP Server Enhancements
 
 ### 2.1 Add MCP resources for capture files
-- **What:** Expose pcap files as MCP resources with URI template `packeteer://captures/{filename}`
+- **What:** Expose pcap files as MCP resources with URI template `sharkline://captures/{filename}`
 - **Files:** `internal/server/server.go`, `internal/tools/resources.go`
 - **Environment:** Go code
 - **Dependencies:** None

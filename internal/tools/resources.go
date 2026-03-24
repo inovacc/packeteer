@@ -7,9 +7,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/inovacc/packeteer/internal/executor"
-	"github.com/inovacc/packeteer/internal/output"
-	"github.com/inovacc/packeteer/internal/safety"
+	"github.com/inovacc/sharkline/internal/executor"
+	"github.com/inovacc/sharkline/internal/output"
+	"github.com/inovacc/sharkline/internal/safety"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 )
 
@@ -18,14 +18,14 @@ func RegisterResources(server *mcp.Server, exec executor.CommandExecutor, captur
 	// Resource template for pcap files.
 	server.AddResourceTemplate(
 		&mcp.ResourceTemplate{
-			URITemplate: "packeteer://captures/{filename}",
+			URITemplate: "sharkline://captures/{filename}",
 			Name:        "Capture File",
 			Description: "Read metadata and summary of a pcap/pcapng capture file from the captures directory",
 			MIMEType:    "text/plain",
 		},
 		func(ctx context.Context, req *mcp.ReadResourceRequest) (*mcp.ReadResourceResult, error) {
 			uri := req.Params.URI
-			filename := strings.TrimPrefix(uri, "packeteer://captures/")
+			filename := strings.TrimPrefix(uri, "sharkline://captures/")
 
 			if filename == "" || strings.Contains(filename, "/") || strings.Contains(filename, "\\") {
 				return nil, mcp.ResourceNotFoundError(uri)
@@ -69,7 +69,7 @@ func RegisterResources(server *mcp.Server, exec executor.CommandExecutor, captur
 	// Static resource listing available captures.
 	server.AddResource(
 		&mcp.Resource{
-			URI:         "packeteer://captures",
+			URI:         "sharkline://captures",
 			Name:        "Available Captures",
 			Description: "List all pcap/pcapng files in the captures directory",
 			MIMEType:    "text/plain",

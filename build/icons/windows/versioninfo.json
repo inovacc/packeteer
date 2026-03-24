@@ -21,14 +21,14 @@
   "StringFileInfo": {
     "Comments": "",
     "CompanyName": "",
-    "FileDescription": "packeteer",
+    "FileDescription": "sharkline",
     "FileVersion": "1.0.0",
-    "InternalName": "packeteer",
+    "InternalName": "sharkline",
     "LegalCopyright": "",
     "LegalTrademarks": "",
-    "OriginalFilename": "packeteer.exe",
+    "OriginalFilename": "sharkline.exe",
     "PrivateBuild": "",
-    "ProductName": "packeteer",
+    "ProductName": "sharkline",
     "ProductVersion": "1.0.0",
     "SpecialBuild": ""
   },

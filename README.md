@@ -1,8 +1,8 @@
-# Packeteer
+# Sharkline
 
 **Packet intelligence, on demand.**
 
-Packeteer is an MCP (Model Context Protocol) server that wraps Wireshark's CLI tools — tshark, capinfos, editcap, and mergecap — giving AI assistants the ability to capture, analyze, and dissect network traffic.
+Sharkline is an MCP (Model Context Protocol) server that wraps Wireshark's CLI tools — tshark, capinfos, editcap, and mergecap — giving AI assistants the ability to capture, analyze, and dissect network traffic.
 
 ## Prerequisites
 
@@ -12,7 +12,7 @@ Packeteer is an MCP (Model Context Protocol) server that wraps Wireshark's CLI t
 ## Installation
 
 ```bash
-go install github.com/inovacc/packeteer@latest
+go install github.com/inovacc/sharkline@latest
 ```
 
 ## Claude Desktop Configuration
@@ -22,8 +22,8 @@ Add to your `claude_desktop_config.json`:
 ```json
 {
   "mcpServers": {
-    "packeteer": {
-      "command": "packeteer",
+    "sharkline": {
+      "command": "sharkline",
       "args": ["serve"]
     }
   }
@@ -64,27 +64,27 @@ Add to your `claude_desktop_config.json`:
 
 | Resource | Description |
 |----------|-------------|
-| `packeteer://captures` | List available pcap files in the captures directory |
-| `packeteer://captures/{filename}` | Get metadata for a specific capture file |
+| `sharkline://captures` | List available pcap files in the captures directory |
+| `sharkline://captures/{filename}` | Get metadata for a specific capture file |
 
 ## Usage
 
 ### Stdio Transport (default)
 
 ```bash
-packeteer serve
+sharkline serve
 ```
 
 ### HTTP Transport (remote)
 
 ```bash
-packeteer serve --transport http --port 8080
+sharkline serve --transport http --port 8080
 ```
 
 ### With Capture Directory
 
 ```bash
-packeteer serve --capture-dir /path/to/pcaps
+sharkline serve --capture-dir /path/to/pcaps
 ```
 
 ## Development

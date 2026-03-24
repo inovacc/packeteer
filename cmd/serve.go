@@ -6,15 +6,15 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/inovacc/packeteer/internal/executor"
-	"github.com/inovacc/packeteer/internal/server"
+	"github.com/inovacc/sharkline/internal/executor"
+	"github.com/inovacc/sharkline/internal/server"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 	"github.com/spf13/cobra"
 )
 
 var serveCmd = &cobra.Command{
 	Use:   "serve",
-	Short: "Start the Packeteer MCP server",
+	Short: "Start the Sharkline MCP server",
 	Long: `Start the MCP server that exposes Wireshark CLI tools for packet capture
 and network analysis.
 
@@ -24,16 +24,16 @@ Transports:
 
 Examples:
   # Stdio transport (Claude Desktop)
-  packeteer serve
+  sharkline serve
 
   # HTTP transport (remote connections)
-  packeteer serve --transport http --port 8080
+  sharkline serve --transport http --port 8080
 
 Claude Desktop config (stdio):
   {
     "mcpServers": {
-      "packeteer": {
-        "command": "packeteer",
+      "sharkline": {
+        "command": "sharkline",
         "args": ["serve"]
       }
     }
@@ -59,12 +59,12 @@ Claude Desktop config (stdio):
 
 		switch transport {
 		case "stdio":
-			logger.Info("starting packeteer MCP server", "transport", "stdio")
+			logger.Info("starting sharkline MCP server", "transport", "stdio")
 			return srv.Run(cmd.Context(), &mcp.StdioTransport{})
 
 		case "http":
 			addr := fmt.Sprintf(":%d", port)
-			logger.Info("starting packeteer MCP server", "transport", "http", "addr", addr)
+			logger.Info("starting sharkline MCP server", "transport", "http", "addr", addr)
 
 			handler := mcp.NewStreamableHTTPHandler(
 				func(_ *http.Request) *mcp.Server { return srv },

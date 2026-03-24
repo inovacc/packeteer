@@ -17,15 +17,15 @@ var (
 var aicontextCmd = &cobra.Command{
 	Use:   "aicontext",
 	Short: "Generate AI context documentation",
-	Long: "Generate structured documentation about packeteer for use by AI tools.\n" +
+	Long: "Generate structured documentation about sharkline for use by AI tools.\n" +
 		"\n" +
 		"Outputs a markdown (or JSON) reference of all commands, flags, and usage\n" +
 		"patterns that AI assistants can consume as context.\n" +
 		"\n" +
 		"Examples:\n" +
-		"  packeteer aicontext             # Markdown output (default)\n" +
-		"  packeteer aicontext --json      # Structured JSON\n" +
-		"  packeteer aicontext --compact   # Shorter output",
+		"  sharkline aicontext             # Markdown output (default)\n" +
+		"  sharkline aicontext --json      # Structured JSON\n" +
+		"  sharkline aicontext --compact   # Shorter output",
 	RunE: runAIContext,
 }
 
@@ -79,9 +79,9 @@ func runAIContext(cmd *cobra.Command, _ []string) error {
 func printAIContextMarkdown(cmd *cobra.Command) error {
 	var b strings.Builder
 
-	b.WriteString("# packeteer - AI Context\n\n")
+	b.WriteString("# sharkline - AI Context\n\n")
 	b.WriteString("## Overview\n\n")
-	b.WriteString("packeteer is a CLI application\n\n")
+	b.WriteString("sharkline is a CLI application\n\n")
 
 	// Global flags
 	var globalFlags []FlagDetail
@@ -165,7 +165,7 @@ func printAIContextMarkdown(cmd *cobra.Command) error {
 func printAIContextCompact(cmd *cobra.Command) error {
 	var b strings.Builder
 
-	b.WriteString("# packeteer - packeteer is a CLI application\n\n")
+	b.WriteString("# sharkline - sharkline is a CLI application\n\n")
 
 	// Global flags
 	var globalParts []string
@@ -199,9 +199,9 @@ func printAIContextCompact(cmd *cobra.Command) error {
 
 func printAIContextJSON(cmd *cobra.Command) error {
 	doc := aiContextDoc{
-		Tool:        "packeteer",
+		Tool:        "sharkline",
 		Version:     "dev",
-		Description: "packeteer is a CLI application",
+		Description: "sharkline is a CLI application",
 	}
 
 	// Global flags
@@ -337,7 +337,7 @@ func aiWriteCompactCommand(b *strings.Builder, cmd *cobra.Command, prefix string
 		name = prefix + " " + name
 	}
 
-	_, _ = fmt.Fprintf(b, "- `packeteer %s` - %s", name, cmd.Short)
+	_, _ = fmt.Fprintf(b, "- `sharkline %s` - %s", name, cmd.Short)
 
 	// Inline flags
 	var flagParts []string

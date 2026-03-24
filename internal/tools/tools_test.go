@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/inovacc/packeteer/internal/executor"
+	"github.com/inovacc/sharkline/internal/executor"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 )
 

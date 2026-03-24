@@ -1,4 +1,4 @@
-module github.com/inovacc/packeteer
+module github.com/inovacc/sharkline
 
 go 1.25.0
 
