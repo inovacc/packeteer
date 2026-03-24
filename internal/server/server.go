@@ -4,11 +4,12 @@ import (
 	"log/slog"
 
 	"github.com/inovacc/packeteer/internal/executor"
+	"github.com/inovacc/packeteer/internal/safety"
 	"github.com/inovacc/packeteer/internal/tools"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 )
 
-const version = "0.1.0"
+const version = "1.1.0-dev"
 
 // New creates and configures the Packeteer MCP server with all tools, resources, and prompts registered.
 func New(exec executor.CommandExecutor, logger *slog.Logger, opts ...Option) *mcp.Server {
@@ -30,9 +31,12 @@ Available tools cover the full Wireshark suite:
 - editcap: filter/extract packets from pcap files
 - mergecap: combine multiple capture files
 
-Safety: captures are limited to 30s/1000 packets. File paths are validated. Filters are sanitized.`,
+Safety: captures are limited to 30s/1000 packets, max 3 concurrent. File paths are validated. Filters are sanitized.
+Use summarize=true on read_pcap/capture_packets for structured packet summaries instead of raw JSON.`,
 		},
 	)
+
+	captureLimiter := safety.NewCaptureLimiter(cfg.maxConcurrentCaptures)
 
 	// Tier 1 — Essential tools
 	mcp.AddTool(server, &mcp.Tool{
@@ -42,8 +46,8 @@ Safety: captures are limited to 30s/1000 packets. File paths are validated. Filt
 
 	mcp.AddTool(server, &mcp.Tool{
 		Name:        "capture_packets",
-		Description: "Capture live network packets with optional BPF and display filters. Returns JSON-formatted packet data. Captures are limited to 30 seconds and 1000 packets for safety.",
-	}, tools.NewCaptureHandler(exec))
+		Description: "Capture live network packets with optional BPF and display filters. Returns JSON-formatted packet data. Captures are limited to 30 seconds, 1000 packets, and 3 concurrent. Set summarize=true for structured summaries.",
+	}, tools.NewCaptureHandler(exec, captureLimiter))
 
 	mcp.AddTool(server, &mcp.Tool{
 		Name:        "read_pcap",
@@ -103,7 +107,8 @@ Safety: captures are limited to 30s/1000 packets. File paths are validated. Filt
 }
 
 type config struct {
-	captureDir string
+	captureDir            string
+	maxConcurrentCaptures int
 }
 
 // Option configures the MCP server.
@@ -113,5 +118,13 @@ type Option func(*config)
 func WithCaptureDir(dir string) Option {
 	return func(c *config) {
 		c.captureDir = dir
+	}
+}
+
+// WithMaxConcurrentCaptures sets the maximum number of simultaneous live captures.
+// Defaults to 3 if not set or set to 0.
+func WithMaxConcurrentCaptures(max int) Option {
+	return func(c *config) {
+		c.maxConcurrentCaptures = max
 	}
 }

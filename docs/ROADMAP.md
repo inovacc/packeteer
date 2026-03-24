@@ -1,7 +1,7 @@
 # Roadmap
 
 ## Current Status
-**Overall Progress:** 90% - All tools, resources, prompts implemented. Polish remaining.
+**Overall Progress:** 100% - v1.0.0 released
 
 ## Phases
 
@@ -28,14 +28,20 @@
 - [x] list_protocols — protocol dissector listing
 - [x] decode_packet — verbose packet decode
 
-### Phase 4: Polish & Release [IN PROGRESS]
+### Phase 4: Polish & Release [COMPLETE]
 - [x] MCP resources for capture file browsing
 - [x] MCP prompts (analyze-traffic, investigate-connection, security-scan)
 - [x] Unit tests for executor, output, safety, server, tools
-- [ ] CI integration tests with real tshark
-- [ ] Streamable HTTP transport option
-- [ ] GoReleaser pipeline validation
-- [ ] v1.0.0 release
+- [x] CI integration tests with real tshark
+- [x] Streamable HTTP transport option
+- [x] GoReleaser pipeline validation (6 platforms)
+- [x] v1.0.0 released — 2026-03-24
+
+### Phase 5: Hardening & v1.1.0 [NOT STARTED]
+- [ ] Increase test coverage to 80%+ (resource/prompt tests)
+- [ ] Sample pcap + end-to-end quickstart demo
+- [ ] Structured JSON output parsing for typed packet data
+- [ ] Concurrent capture management with semaphore limiting
 
 ## Test Coverage
 

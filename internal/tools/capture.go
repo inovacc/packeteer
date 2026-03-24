@@ -19,10 +19,21 @@ type CaptureInput struct {
 	Duration      int    `json:"duration,omitempty" jsonschema:"capture duration in seconds (max 30, default 10)"`
 	PacketCount   int    `json:"packet_count,omitempty" jsonschema:"max packets to capture (max 1000, default 100)"`
 	OutputFile    string `json:"output_file,omitempty" jsonschema:"path to save pcap file (.pcap or .pcapng)"`
+	Summarize     bool   `json:"summarize,omitempty" jsonschema:"parse JSON into structured packet summaries (default false)"`
 }
 
-func NewCaptureHandler(exec executor.CommandExecutor) func(context.Context, *mcp.CallToolRequest, CaptureInput) (*mcp.CallToolResult, struct{}, error) {
+// NewCaptureHandler creates a capture tool handler. If limiter is non-nil,
+// concurrent captures are limited.
+func NewCaptureHandler(exec executor.CommandExecutor, limiter *safety.CaptureLimiter) func(context.Context, *mcp.CallToolRequest, CaptureInput) (*mcp.CallToolResult, struct{}, error) {
 	return func(ctx context.Context, _ *mcp.CallToolRequest, input CaptureInput) (*mcp.CallToolResult, struct{}, error) {
+		if limiter != nil {
+			release, err := limiter.Acquire(ctx)
+			if err != nil {
+				return errorResult(fmt.Sprintf("Capture limit reached: %v (active: %d/%d)", err, limiter.Active(), limiter.Max())), struct{}{}, nil
+			}
+			defer release()
+		}
+
 		if err := safety.SanitizeInterfaceName(input.Interface); err != nil {
 			return errorResult(err.Error()), struct{}{}, nil
 		}
@@ -68,7 +79,19 @@ func NewCaptureHandler(exec executor.CommandExecutor) func(context.Context, *mcp
 			return errorResult("Capture failed: " + err.Error()), struct{}{}, nil
 		}
 
-		truncated, wasTruncated := output.Truncate(stdout, output.DefaultMaxBytes)
+		var resultBytes []byte
+		if input.Summarize {
+			parsed, parseErr := output.ParseTSharkJSON(stdout, count)
+			if parseErr != nil {
+				resultBytes = stdout
+			} else {
+				resultBytes = parsed
+			}
+		} else {
+			resultBytes = stdout
+		}
+
+		truncated, wasTruncated := output.Truncate(resultBytes, output.DefaultMaxBytes)
 		metadata := map[string]string{
 			"Interface":    input.Interface,
 			"Max Packets":  strconv.Itoa(count),

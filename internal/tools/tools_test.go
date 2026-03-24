@@ -88,7 +88,7 @@ func TestCapturePackets(t *testing.T) {
 		Stdout: []byte(`[{"_source":{"layers":{"frame":{"number":"1"}}}}]`),
 	}
 
-	handler := NewCaptureHandler(mock)
+	handler := NewCaptureHandler(mock, nil)
 
 	t.Run("valid capture", func(t *testing.T) {
 		result, _, err := handler(context.Background(), nil, CaptureInput{

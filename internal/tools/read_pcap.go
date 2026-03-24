@@ -14,6 +14,7 @@ type ReadPcapInput struct {
 	FilePath      string `json:"file_path" jsonschema:"path to pcap/pcapng file to read (required)"`
 	DisplayFilter string `json:"display_filter,omitempty" jsonschema:"Wireshark display filter (e.g. 'tcp.port == 80')"`
 	MaxPackets    int    `json:"max_packets,omitempty" jsonschema:"maximum packets to return (max 1000, default 100)"`
+	Summarize     bool   `json:"summarize,omitempty" jsonschema:"parse JSON into structured packet summaries (default false)"`
 }
 
 func NewReadPcapHandler(exec executor.CommandExecutor) func(context.Context, *mcp.CallToolRequest, ReadPcapInput) (*mcp.CallToolResult, struct{}, error) {
@@ -46,11 +47,24 @@ func NewReadPcapHandler(exec executor.CommandExecutor) func(context.Context, *mc
 			return errorResult("Failed to read pcap: " + err.Error()), struct{}{}, nil
 		}
 
-		truncated, wasTruncated := output.Truncate(stdout, output.DefaultMaxBytes)
+		var resultBytes []byte
+		if input.Summarize {
+			parsed, parseErr := output.ParseTSharkJSON(stdout, count)
+			if parseErr != nil {
+				resultBytes = stdout
+			} else {
+				resultBytes = parsed
+			}
+		} else {
+			resultBytes = stdout
+		}
+
+		truncated, wasTruncated := output.Truncate(resultBytes, output.DefaultMaxBytes)
 		metadata := map[string]string{
-			"File":       input.FilePath,
+			"File":        input.FilePath,
 			"Max Packets": strconv.Itoa(count),
-			"Truncated":  strconv.FormatBool(wasTruncated),
+			"Truncated":   strconv.FormatBool(wasTruncated),
+			"Summarized":  strconv.FormatBool(input.Summarize),
 		}
 
 		if input.DisplayFilter != "" {
