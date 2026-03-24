@@ -18,6 +18,7 @@ type ExtractFieldsInput struct {
 	MaxPackets    int      `json:"max_packets,omitempty" jsonschema:"maximum packets to process (max 1000, default 100)"`
 	Separator     string   `json:"separator,omitempty" jsonschema:"field separator character (default tab)"`
 	ShowHeader    bool     `json:"show_header,omitempty" jsonschema:"include field names as header row"`
+	Summarize     bool     `json:"summarize,omitempty" jsonschema:"parse output into structured JSON with named fields (default false)"`
 }
 
 func NewExtractFieldsHandler(exec executor.CommandExecutor) func(context.Context, *mcp.CallToolRequest, ExtractFieldsInput) (*mcp.CallToolResult, struct{}, error) {
@@ -72,11 +73,24 @@ func NewExtractFieldsHandler(exec executor.CommandExecutor) func(context.Context
 			return errorResult("Failed to extract fields: " + err.Error()), struct{}{}, nil
 		}
 
-		truncated, wasTruncated := output.Truncate(stdout, output.DefaultMaxBytes)
+		var resultBytes []byte
+		if input.Summarize {
+			parsed, parseErr := output.ParseFieldOutput(stdout, input.Fields)
+			if parseErr != nil {
+				resultBytes = stdout
+			} else {
+				resultBytes = parsed
+			}
+		} else {
+			resultBytes = stdout
+		}
+
+		truncated, wasTruncated := output.Truncate(resultBytes, output.DefaultMaxBytes)
 		metadata := map[string]string{
-			"File":      input.FilePath,
-			"Fields":    strings.Join(input.Fields, ", "),
-			"Truncated": strconv.FormatBool(wasTruncated),
+			"File":       input.FilePath,
+			"Fields":     strings.Join(input.Fields, ", "),
+			"Truncated":  strconv.FormatBool(wasTruncated),
+			"Summarized": strconv.FormatBool(input.Summarize),
 		}
 
 		return textResult(output.FormatResult(string(truncated), metadata)), struct{}{}, nil

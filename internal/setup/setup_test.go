@@ -81,3 +81,65 @@ func TestFindBinary(t *testing.T) {
 		t.Error("expected error for nonexistent binary")
 	}
 }
+
+func TestGetTSharkVersion(t *testing.T) {
+	status := Check(slog.New(slog.NewJSONHandler(os.Stderr, &slog.HandlerOptions{Level: slog.LevelError})))
+	if !status.Installed {
+		t.Skip("tshark not installed")
+	}
+
+	version, err := getTSharkVersion(status.TSharkPath)
+	if err != nil {
+		t.Fatalf("getTSharkVersion failed: %v", err)
+	}
+	if version == "" {
+		t.Error("expected non-empty version")
+	}
+	// Version should match X.Y.Z pattern.
+	parts := strings.Split(version, ".")
+	if len(parts) != 3 {
+		t.Errorf("expected X.Y.Z format, got %q", version)
+	}
+	t.Logf("version: %s", version)
+}
+
+func TestPrintInstructions_AllPlatforms(t *testing.T) {
+	// Just verify the function doesn't panic and returns content.
+	instructions := PrintInstructions()
+	if !strings.Contains(instructions, "Installation Guide") {
+		t.Error("expected 'Installation Guide' header")
+	}
+	if !strings.Contains(instructions, "tshark.dev") {
+		t.Error("expected tshark.dev reference")
+	}
+}
+
+func TestCheck_StatusFields(t *testing.T) {
+	logger := slog.New(slog.NewJSONHandler(os.Stderr, &slog.HandlerOptions{Level: slog.LevelError}))
+	status := Check(logger)
+
+	if status.Installed {
+		// All tools should be found if tshark is installed.
+		if status.CapinfosPath == "" {
+			t.Error("expected capinfos when tshark is installed")
+		}
+		if status.EditcapPath == "" {
+			t.Error("expected editcap when tshark is installed")
+		}
+		if status.MergecapPath == "" {
+			t.Error("expected mergecap when tshark is installed")
+		}
+	}
+}
+
+func TestFindBinary_PlatformPaths(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		// Test that findBinary checks Program Files.
+		path, err := findBinary("tshark")
+		if err == nil {
+			if !strings.Contains(path, "Wireshark") {
+				t.Errorf("expected Wireshark in path, got %s", path)
+			}
+		}
+	}
+}

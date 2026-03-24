@@ -22,12 +22,13 @@ const (
 
 // Status describes the current tshark installation state.
 type Status struct {
-	Installed    bool
-	TSharkPath   string
-	Version      string
-	CapinfosPath string
-	EditcapPath  string
-	MergecapPath string
+	Installed      bool
+	TSharkPath     string
+	Version        string
+	CapinfosPath   string
+	EditcapPath    string
+	MergecapPath   string
+	NpcapInstalled bool // Windows only: whether Npcap is installed for live capture
 }
 
 // Check detects whether tshark and related tools are installed.
@@ -54,6 +55,10 @@ func Check(logger *slog.Logger) *Status {
 		if version, err := getTSharkVersion(s.TSharkPath); err == nil {
 			s.Version = version
 		}
+	}
+
+	if runtime.GOOS == "windows" {
+		s.NpcapInstalled = checkNpcap()
 	}
 
 	return s

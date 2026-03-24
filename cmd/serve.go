@@ -8,6 +8,7 @@ import (
 
 	"github.com/inovacc/sharkline/internal/executor"
 	"github.com/inovacc/sharkline/internal/server"
+	shtransport "github.com/inovacc/sharkline/internal/transport"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 	"github.com/spf13/cobra"
 )
@@ -88,8 +89,40 @@ Claude Desktop config (stdio):
 			}
 			return nil
 
+		case "ws":
+			addr := fmt.Sprintf(":%d", port)
+			logger.Info("starting sharkline MCP server", "transport", "websocket", "addr", addr)
+
+			httpHandler := mcp.NewStreamableHTTPHandler(
+				func(_ *http.Request) *mcp.Server { return srv },
+				&mcp.StreamableHTTPOptions{
+					Logger: logger,
+				},
+			)
+
+			wsProxy := shtransport.NewWebSocketProxy(httpHandler, logger)
+
+			mux := http.NewServeMux()
+			mux.Handle("/ws", wsProxy)
+			mux.Handle("/", httpHandler) // Also serve HTTP for non-WS clients
+
+			httpServer := &http.Server{
+				Addr:    addr,
+				Handler: mux,
+			}
+
+			go func() {
+				<-cmd.Context().Done()
+				_ = httpServer.Close()
+			}()
+
+			if err := httpServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+				return fmt.Errorf("WebSocket server failed: %w", err)
+			}
+			return nil
+
 		default:
-			return fmt.Errorf("unknown transport %q: use 'stdio' or 'http'", transport)
+			return fmt.Errorf("unknown transport %q: use 'stdio', 'http', or 'ws'", transport)
 		}
 	},
 }
@@ -98,6 +131,6 @@ func init() {
 	rootCmd.AddCommand(serveCmd)
 	serveCmd.Flags().String("wireshark-dir", "", "path to Wireshark installation directory (auto-detected if not set)")
 	serveCmd.Flags().String("capture-dir", "", "directory containing pcap files for MCP resource browsing")
-	serveCmd.Flags().String("transport", "stdio", "transport type: 'stdio' or 'http'")
-	serveCmd.Flags().Int("port", 8080, "HTTP server port (only used with --transport http)")
+	serveCmd.Flags().String("transport", "stdio", "transport type: 'stdio', 'http', or 'ws'")
+	serveCmd.Flags().Int("port", 8080, "server port (used with --transport http or ws)")
 }

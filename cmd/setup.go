@@ -27,6 +27,7 @@ Supported installation methods:
 Reference: https://tshark.dev/setup/install/`,
 	RunE: func(cmd *cobra.Command, _ []string) error {
 		install, _ := cmd.Flags().GetBool("install")
+		installNpcap, _ := cmd.Flags().GetBool("install-npcap")
 
 		logger := slog.New(slog.NewJSONHandler(os.Stderr, &slog.HandlerOptions{
 			Level: slog.LevelInfo,
@@ -60,6 +61,18 @@ Reference: https://tshark.dev/setup/install/`,
 			}
 		}
 
+		// Show Npcap status on Windows.
+		if runtime.GOOS == "windows" {
+			fmt.Println()
+			if status.NpcapInstalled {
+				fmt.Println("  [OK]      npcap      installed (live capture enabled)")
+			} else {
+				fmt.Println("  [MISSING] npcap      not found (live capture disabled)")
+				fmt.Println("            Install:   sharkline setup --install-npcap")
+				allFound = false
+			}
+		}
+
 		if status.Version != "" {
 			fmt.Printf("\n  Version: %s\n", status.Version)
 		}
@@ -71,8 +84,25 @@ Reference: https://tshark.dev/setup/install/`,
 
 		fmt.Println()
 
+		// Handle --install-npcap flag.
+		if installNpcap {
+			if runtime.GOOS != "windows" {
+				fmt.Println("Npcap is only needed on Windows.")
+				return nil
+			}
+			fmt.Println("Installing Npcap...")
+			if err := setup.InstallNpcap(cmd.Context(), logger); err != nil {
+				return fmt.Errorf("Npcap installation failed: %w", err)
+			}
+			fmt.Println("Npcap installed. Live packet capture is now enabled.")
+			return nil
+		}
+
 		if !install {
 			fmt.Println(setup.PrintInstructions())
+			if runtime.GOOS == "windows" && !status.NpcapInstalled {
+				fmt.Println(setup.NpcapInstructions())
+			}
 			fmt.Println("Or run: sharkline setup --install")
 			return nil
 		}
@@ -99,4 +129,5 @@ Reference: https://tshark.dev/setup/install/`,
 func init() {
 	rootCmd.AddCommand(setupCmd)
 	setupCmd.Flags().Bool("install", false, "auto-install Wireshark/tshark for your platform")
+	setupCmd.Flags().Bool("install-npcap", false, "install Npcap for live packet capture (Windows only)")
 }
