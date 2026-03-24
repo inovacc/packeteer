@@ -1,7 +1,7 @@
 # Roadmap
 
 ## Current Status
-**Overall Progress:** 75% - Core MCP server with all 10 tools implemented
+**Overall Progress:** 90% - All tools, resources, prompts implemented. Polish remaining.
 
 ## Phases
 
@@ -29,21 +29,23 @@
 - [x] decode_packet — verbose packet decode
 
 ### Phase 4: Polish & Release [IN PROGRESS]
-- [ ] Increase test coverage to 80%+
-- [ ] Integration tests with real tshark
-- [ ] MCP resources and prompts
-- [ ] HTTP transport option
+- [x] MCP resources for capture file browsing
+- [x] MCP prompts (analyze-traffic, investigate-connection, security-scan)
+- [x] Unit tests for executor, output, safety, server, tools
+- [ ] CI integration tests with real tshark
+- [ ] Streamable HTTP transport option
+- [ ] GoReleaser pipeline validation
 - [ ] v1.0.0 release
 
 ## Test Coverage
 
-**Current:** 27.0%  |  **Target:** 80%
+**Current:** 37.7%  |  **Target:** 80%
 
 | Package | Coverage | Status |
 |---------|----------|--------|
-| internal/safety | 74.5% | Good |
-| internal/tools | 68.4% | Needs improvement |
-| internal/executor | 0.0% | No tests (mock used indirectly) |
-| internal/output | 0.0% | No tests |
-| internal/server | 0.0% | No tests |
+| internal/safety | 100.0% | Complete |
+| internal/output | 100.0% | Complete |
+| internal/server | 85.0% | Good |
+| internal/executor | 68.1% | Good |
+| internal/tools | 58.0% | Needs improvement (resources/prompts untested) |
 | cmd | 0.0% | Scaffold code |

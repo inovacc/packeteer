@@ -52,6 +52,41 @@ Add to your `claude_desktop_config.json`:
 | `list_protocols` | Available protocol dissectors |
 | `decode_packet` | Verbose decode of specific packets |
 
+## MCP Prompts
+
+| Prompt | Description |
+|--------|-------------|
+| `analyze-traffic` | Guided workflow for protocol breakdown, top talkers, anomaly detection |
+| `investigate-connection` | Deep-dive into a specific connection between two hosts |
+| `security-scan` | Scan for DNS exfiltration, cleartext credentials, port scanning, TLS issues |
+
+## MCP Resources
+
+| Resource | Description |
+|----------|-------------|
+| `packeteer://captures` | List available pcap files in the captures directory |
+| `packeteer://captures/{filename}` | Get metadata for a specific capture file |
+
+## Usage
+
+### Stdio Transport (default)
+
+```bash
+packeteer serve
+```
+
+### HTTP Transport (remote)
+
+```bash
+packeteer serve --transport http --port 8080
+```
+
+### With Capture Directory
+
+```bash
+packeteer serve --capture-dir /path/to/pcaps
+```
+
 ## Development
 
 ```bash

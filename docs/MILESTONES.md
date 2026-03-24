@@ -1,9 +1,8 @@
 # Milestones
 
 ## v0.1.0 - Foundation
-- **Target:** Complete
 - **Status:** Complete
-- **Test Coverage:** 27.0% (safety 74.5%, tools 68.4%, executor 0%, output 0%)
+- **Test Coverage:** 37.7% (safety 100%, output 100%, server 85%, executor 68%, tools 58%)
 - **Goals:**
   - [x] Project scaffolding with Cobra CLI
   - [x] Branding (Packeteer)
@@ -15,29 +14,26 @@
   - [x] Unit tests for safety and tool handlers
 
 ## v0.2.0 - Test Coverage & Robustness
-- **Target:** TBD
-- **Status:** Not Started
-- **Coverage Target:** 80%+
+- **Status:** Complete
 - **Goals:**
-  - [ ] Executor package tests
-  - [ ] Output package tests
-  - [ ] Server integration tests (in-memory MCP transport)
-  - [ ] Safety edge case tests (ValidateOutputPath, SanitizeStatType)
-  - [ ] Filter pcap handler tests
+  - [x] Executor package tests (68.1%)
+  - [x] Output package tests (100%)
+  - [x] Server integration tests via in-memory MCP transport (85%)
+  - [x] Safety edge case tests — ValidateOutputPath, SanitizeStatType (100%)
+  - [x] Filter pcap handler tests (95%)
 
 ## v0.3.0 - MCP Enhancements
-- **Target:** TBD
-- **Status:** Not Started
+- **Status:** In Progress
 - **Goals:**
-  - [ ] MCP resources for capture files
-  - [ ] MCP prompts for common analysis workflows
+  - [x] MCP resources for capture files (packeteer://captures, packeteer://captures/{filename})
+  - [x] MCP prompts: analyze-traffic, investigate-connection, security-scan
   - [ ] Streamable HTTP transport option
 
 ## v1.0.0 - First Stable Release
 - **Target:** TBD
 - **Status:** Not Started
 - **Goals:**
-  - [ ] Full test coverage (80%+)
-  - [ ] Integration tests with real tshark in CI
-  - [ ] Documentation complete
+  - [ ] CI integration tests with real tshark
   - [ ] GoReleaser pipeline validated
+  - [ ] Documentation complete
+  - [ ] Tag and publish release
