@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=packeteer
+Comment=packeteer
+Exec=packeteer
+Icon=packeteer
+Categories=Utility;
+Terminal=false
